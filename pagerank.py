@@ -23,10 +23,10 @@ class Graph:
 	Team strength distributed around the graph via scores
 	"""
 
-	def __init__(self):
+	def __init__(self, leak=0.8):
 		self.nodes = {}
 		self.size = 0
-		self.L = 1
+		self.L = leak
 
 	def add_node(self, team, redistribute = False):
 		new_node = Vertex(team)
@@ -85,22 +85,13 @@ class Graph:
 				nbr.scorerank_updating += send_score
 				if debug:
 					print "   Sending to node --> {}".format(nbr); print "   Score sent is {}".format(send_score)
-					pass
-				
-
-		# Redistribute scorerank from 'sink' teams
-		# i.e. teams with no goals conceded, only incoming votes
-		redistribute = 0
-		for team in sink_nodes:
-			redistribute += node.scorerank_updating
-		redistribute_per_team = redistribute*1.0 / self.size
+					pass		
 
 		for team in self.nodes:
 			# Add all incoming with random hop value and redistribution factor
 			node = self.nodes[team]
 			node.scorerank = self.L * node.scorerank_updating   # i.e. actual scorerank assigned
 			node.scorerank += (1-self.L) * 1.0/self.size    # i.e. random hop
-			# node.scorerank += redistribute_per_team    # i.e. redistribute from sink nodes
 			node.scorerank_updating = 0
 
 		if debug:
@@ -167,12 +158,13 @@ if __name__ == '__main__':
 
 	# Load CSV files into dataframe
 	years = range(2012, 2013)
-	#years = range(0, 1)
+	if debug:
+		years = range(0, 1)
 	csv_list = ['{}.csv'.format(year) for year in years]
 	df = open_and_combine_csvs(csv_list)
 
 	# Create graph
-	g = Graph()
+	g = Graph(leak=0.5)
 	for i in df.index:
 		match_row = df.ix[i]
 		home_team, away_team, home_score, away_score = match_row[[
@@ -188,5 +180,5 @@ if __name__ == '__main__':
 		g.add_edge(team_from = away_team, team_to = home_team, weight = int(home_score))
 		
 	g.redistribute_scoreranks()
-	g.iterate_scoreranks_n(50)
+	g.iterate_scoreranks_n(5)
 	g.print_scoreranks()
