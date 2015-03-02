@@ -1,4 +1,4 @@
-# Scorerank model for premier league 2013-2014
+# Scorerank model for premier league 2013-2014 - see https://davidabelman.wordpress.com/2015/03/02/modelling-football-team-strength-using-pagerank/
 
 import pandas as pd
 import matplotlib.pyplot as plt
