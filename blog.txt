@@ -15,10 +15,15 @@ Firstly, let's visualise the final graph (after 10 iterations) to provide a bett
 
 IMAGE HERE
 
-How can we evaluate how well the algorithm performs? A first port of call could be the league table (they do say 'the league table never lies', dubiously). The following chart shows the relative ranking for the scorerank model versus the final premier league table.
+How can we evaluate how well the algorithm performs? A first port of call could be the league table (they do say that 'the league table never lies', dubiously). The following chart shows the relative ranking for the scorerank model versus the final premier league table.
 
 IMAGE HERE
 
+The scorerank model accurately portrays the top five teams in the table. Below this there is a reasonably strong correlation between scorerank and final league position, though not a perfect alignment. The current algorithm suggests that Norwich, Hull and Crystal Palace should have been relegated (lowest scorerank values along the y-axis) whereas in reality it was Norwich, Fulham and Cardiff that were relegated.
+
+Using this figure it is hard to say whether scorerank reflects team quality any better than the final league table does - perhaps a better way to measure success would be to use the model (built on historical data) to predict score outcomes (from future games). The premier league table could be used as an alternative 'model' to predict score outcomes, and we can compare which methodology performs better.
+
+As a final thought on this initial iteration of the algorithm, let's look at how the scorerank converges. The graph initially starts out with a scorerank of 
 
 Ideas:
 Limit scorerank to 1 per game (helps 0-0 draws be shown for good/bad pairing)
